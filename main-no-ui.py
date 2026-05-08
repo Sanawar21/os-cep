@@ -7,7 +7,7 @@ highest_empty_slot = 0
 total_collected_fruits = 0
 pickers_synchronizer = 0
 
-def do_work(duration_sec, busy_wait: bool=True):
+def do_work(duration_sec, busy_wait: bool=BUSY_WAIT_IN_DO_WORK):
   if busy_wait:
     start = time.time()
     while (time.time() - start) <= duration_sec:

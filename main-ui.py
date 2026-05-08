@@ -54,7 +54,7 @@ def _send_action(actor, event_type: EventType, crate_slot: int = None, picker_ui
 # -----------------------------------
 
 # Program helpers ------------------------
-def do_work(duration_sec, busy_wait: bool=True):
+def do_work(duration_sec, busy_wait: bool=BUSY_WAIT_IN_DO_WORK):
   if busy_wait:
     start = time.time()
     while (time.time() - start) <= duration_sec:
