@@ -23,8 +23,9 @@ empty_crate_notifier = Condition(Lock())
 class EventType(Enum):
     start_truck_load = 1
     empty_crate = 2
-    pick_fruit = 3
-    add_to_crate = 4
+    check_for_a_slot = 3
+    wait_for_a_slot = 4
+    pick_fruit_and_add_to_crate = 5
   
 def http_worker():
     """Consumes the queue and sends POST requests to Flask."""
@@ -113,11 +114,13 @@ def picker_task(uid):
   while True:
     # request a slot to place the fruit
     log("Attempting to reserve a slot in the crate.")
+    send_action(EventType.check_for_a_slot)
     with slot_reserving_lock:
       slot = get_highest_empty_slot()
 
     if slot is None:
       log("An empty slot wasn't found in the crate.")
+      send_action(EventType.wait_for_a_slot)
       
       with empty_crate_notifier:
         if all_fruits_collected():
@@ -125,18 +128,14 @@ def picker_task(uid):
           log("All fruits have been collected from the tree. Exiting.")
           break
         else:
-          send_action(EventType.pick_fruit)
           log("The crate is full, waiting for other Pickers.")
           synchronize()
           continue
-    else:
-        send_action(EventType.pick_fruit) 
 
-
+    send_action(EventType.pick_fruit_and_add_to_crate, slot) 
     do_work(CRATE_LOADING_TIME)
     log(f"Placed fruit in the crate. (Slot #{slot})")
     crate[slot] = 1
-    send_action(EventType.add_to_crate, slot)
 
 
 def loader_task():
@@ -187,7 +186,7 @@ if __name__ == "__main__":
   for picker in pickers:
     picker.join()
   loader_t.join()
-  
+
   print("Waiting for final messages to send to Flask...")
   message_queue.join()
   print("Done. All data propagated.")   
