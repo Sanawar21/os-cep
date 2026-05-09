@@ -11,7 +11,9 @@ message_queue = queue.Queue()
 
 # for the core program
 crate = [0] * CRATE_CAPACITY
-highest_empty_slot = 0
+lowest_empty_slot = 0
+tree = [1] * TOTAL_FRUITS
+lowest_available_fruit = 0
 total_collected_fruits = 0
 pickers_synchronizer = 0
 slot_reserving_lock = Lock()
@@ -65,30 +67,34 @@ def do_work(duration_sec, busy_wait: bool=BUSY_WAIT_IN_DO_WORK):
 def _log(actor, action):
   print(f"[{actor}]: {action}")
 
-def get_highest_empty_slot():
-  global highest_empty_slot, total_collected_fruits
-  if highest_empty_slot == CRATE_CAPACITY or total_collected_fruits == TOTAL_FRUITS:
+def get_lowest_fruit_and_slot():
+  global lowest_empty_slot, lowest_available_fruit, total_collected_fruits
+  if lowest_empty_slot == CRATE_CAPACITY or lowest_available_fruit == TOTAL_FRUITS:
     # a slot is not available
-    return None
+    return (None, None)
   else:
-    # reserve this slot
-    highest_empty_slot += 1
+    # reserve this fruit
+    lowest_available_fruit += 1
     total_collected_fruits += 1
-    return highest_empty_slot - 1
+
+    # reserve this slot
+    lowest_empty_slot += 1
+
+    return (lowest_available_fruit - 1, lowest_empty_slot - 1)
 
 def all_fruits_collected(): # for clarity
   return total_collected_fruits >= TOTAL_FRUITS
 
 def reset_crate():
-  global highest_empty_slot, crate
-  highest_empty_slot = 0
+  global lowest_empty_slot, crate
+  lowest_empty_slot = 0
   crate = [0] * CRATE_CAPACITY
 
 # ------------------------------------------
 
 # Program thread functions -----------------------------
 def picker_task(uid):
-  global highest_empty_slot, pickers_synchronizer
+  global lowest_empty_slot, pickers_synchronizer
   
   def log(action):
     _log(f"PICKER {uid}", action)
@@ -116,7 +122,7 @@ def picker_task(uid):
     log("Attempting to reserve a slot in the crate.")
     send_action(EventType.check_for_a_slot)
     with slot_reserving_lock:
-      slot = get_highest_empty_slot()
+      fruit, slot = get_lowest_fruit_and_slot()
 
     if slot is None:
       log("Slot reservation failed.")
@@ -134,12 +140,13 @@ def picker_task(uid):
 
     send_action(EventType.pick_fruit_and_add_to_crate, slot) 
     do_work(CRATE_LOADING_TIME)
-    log(f"Placed fruit in the crate. (Slot #{slot})")
+    log(f"Placed fruit in the crate. (Fruit #{fruit}; Slot #{slot})")
     crate[slot] = 1
+    tree[fruit] = 0
 
 
 def loader_task():
-    global total_collected_fruits, highest_empty_slot
+    global total_collected_fruits, lowest_empty_slot
 
     def log(action):
       _log(f"LOADER", action)
@@ -151,7 +158,7 @@ def loader_task():
 
       with full_crate_notifier:
 
-        while highest_empty_slot < CRATE_CAPACITY and total_collected_fruits < TOTAL_FRUITS:
+        while lowest_empty_slot < CRATE_CAPACITY and total_collected_fruits < TOTAL_FRUITS:
           full_crate_notifier.wait()
 
         log("Woken up by all the Pickers. Emptying the crate.")
