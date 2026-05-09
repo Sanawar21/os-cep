@@ -16,55 +16,46 @@ BUSY_WAIT_IN_DO_WORK = False # uses time.sleep if False (this is a blocking call
 [PICKER 0]: Attempting to reserve a slot in the crate.
 [PICKER 1]: Attempting to reserve a slot in the crate.
 [PICKER 2]: Attempting to reserve a slot in the crate.
-[PICKER 1]: An empty slot wasn't found in the crate.
+[PICKER 1]: Slot reservation failed.
 [PICKER 1]: The crate is full, waiting for other Pickers.
-[PICKER 1]: Waiting for the crate to empty.
 [PICKER 0]: Placed fruit in the crate. (Slot #1)
-[PICKER 2]: An empty slot wasn't found in the crate.
+[PICKER 2]: Slot reservation failed.
 [PICKER 2]: The crate is full, waiting for other Pickers.
-[PICKER 2]: Waiting for the crate to empty.
 [PICKER 0]: Attempting to reserve a slot in the crate.
-[PICKER 0]: An empty slot wasn't found in the crate.
+[PICKER 0]: Slot reservation failed.
 [PICKER 0]: The crate is full, waiting for other Pickers.
-[PICKER 0]: Waiting for the crate to empty.
-[PICKER 0]: All Pickers are waiting, waking up the Loader.
+[PICKER 0]: All Pickers are synced, waking up the Loader.
 [LOADER]: Woken up by all the Pickers. Emptying the crate.
 [LOADER]: Emptied the crate, notifying the Pickers.
 [LOADER]: Fruits collected: (2)
 [PICKER 2]: Attempting to reserve a slot in the crate.
 [PICKER 1]: Attempting to reserve a slot in the crate.
 [PICKER 0]: Attempting to reserve a slot in the crate.
-[PICKER 0]: An empty slot wasn't found in the crate.
+[PICKER 0]: Slot reservation failed.
 [PICKER 1]: Placed fruit in the crate. (Slot #1)
 [PICKER 0]: The crate is full, waiting for other Pickers.
 [PICKER 1]: Attempting to reserve a slot in the crate.
-[PICKER 0]: Waiting for the crate to empty.
-[PICKER 1]: An empty slot wasn't found in the crate.
+[PICKER 1]: Slot reservation failed.
 [PICKER 2]: Placed fruit in the crate. (Slot #0)
 [PICKER 1]: The crate is full, waiting for other Pickers.
 [PICKER 2]: Attempting to reserve a slot in the crate.
-[PICKER 1]: Waiting for the crate to empty.
-[PICKER 2]: An empty slot wasn't found in the crate.
+[PICKER 2]: Slot reservation failed.
 [PICKER 2]: The crate is full, waiting for other Pickers.
-[PICKER 2]: Waiting for the crate to empty.
-[PICKER 2]: All Pickers are waiting, waking up the Loader.
+[PICKER 2]: All Pickers are synced, waking up the Loader.
 [LOADER]: Woken up by all the Pickers. Emptying the crate.
 [LOADER]: Emptied the crate, notifying the Pickers.
 [LOADER]: Fruits collected: (4)
 [PICKER 2]: Attempting to reserve a slot in the crate.
 [PICKER 0]: Attempting to reserve a slot in the crate.
 [PICKER 2]: Placed fruit in the crate. (Slot #0)
-[PICKER 0]: An empty slot wasn't found in the crate.
+[PICKER 0]: Slot reservation failed.
 [PICKER 2]: Attempting to reserve a slot in the crate.
-[PICKER 0]: Waiting for the crate to empty.
-[PICKER 2]: An empty slot wasn't found in the crate.
+[PICKER 2]: Slot reservation failed.
 [PICKER 0]: All fruits have been collected from the tree. Exiting.
 [PICKER 1]: Attempting to reserve a slot in the crate.
-[PICKER 2]: Waiting for the crate to empty.
-[PICKER 1]: An empty slot wasn't found in the crate.
+[PICKER 1]: Slot reservation failed.
 [PICKER 2]: All fruits have been collected from the tree. Exiting.
-[PICKER 1]: Waiting for the crate to empty.
-[PICKER 1]: All Pickers are waiting, waking up the Loader.
+[PICKER 1]: All Pickers are synced, waking up the Loader.
 [PICKER 1]: All fruits have been collected from the tree. Exiting.
 [LOADER]: Woken up by all the Pickers. Emptying the crate.
 [LOADER]: Emptied the crate, notifying the Pickers.

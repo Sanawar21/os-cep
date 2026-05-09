@@ -51,10 +51,10 @@ def picker_task(uid):
 
   def synchronize(exit: bool = False):
     global pickers_synchronizer
-    log("Waiting for the crate to empty.")
+    
     pickers_synchronizer += 1
     if pickers_synchronizer == PICKER_COUNT:
-      log("All Pickers are waiting, waking up the Loader.")
+      log("All Pickers are synced, waking up the Loader.")
       # this is the last thread
       pickers_synchronizer = 0
       with full_crate_notifier:
@@ -69,7 +69,7 @@ def picker_task(uid):
       slot = get_highest_empty_slot()
 
     if slot is None:
-      log("An empty slot wasn't found in the crate.")
+      log("Slot reservation failed.")
       
       with empty_crate_notifier:
         if all_fruits_collected():
