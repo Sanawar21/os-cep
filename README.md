@@ -1,5 +1,7 @@
 # Operating Systems CEP
 
+Run `git pull` to get the latest version of the project.
+
 To run the project without GUI run: `python main-no-ui.py`
 You can configure the settings using `config.py`.
 
